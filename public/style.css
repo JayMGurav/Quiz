@@ -1,0 +1,118 @@
+body{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin:0;
+    padding: 0;
+    width:100%;
+    
+}
+html{
+    margin:0;
+    padding: 0;
+}
+
+.height_Onescreen{
+    height: 100vh;
+    margin: 0%;
+    padding: 0%;
+}
+.header_img{
+    width: 100%;
+    height: 100%;    
+}
+.homeDet{
+    width: 80%;
+    height: 40%;
+    padding: 2%;
+    text-align: right;
+    font-size:1.5em;
+    color: #343a40;
+}
+.homeDet h1{
+    font-weight: bolder;
+    letter-spacing: 0.125ch;
+}
+.center_Align{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.Btnn{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    position: absolute;
+    bottom: 10%;    
+    /* background: pink; */
+}
+
+.Navbar{
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* background: pink; */
+}
+.logo{
+    float: left;
+    background: #f1f1f1;
+    padding: 1%;
+    margin:1% 0%;
+    position: relative;
+    left: 4%;
+    font-size: 1.5em;
+    font-weight: bolder;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 3px 4px rgba(75, 75, 75, 0.3)
+}
+.navs{
+    float: right;
+    width: 40%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 1%;    
+    margin: 1% 0%;
+    position: relative;
+    right: 1%;
+    font-weight: bold;
+    /* background: darkmagenta; */
+}
+
+.AboutDet{
+    width:80%;
+    height: 60%;
+    padding: 2%;
+    font-size: 1.25em;
+    color: #343a40;
+}
+.signInDet{
+    width:80%;
+    height: 60%;
+    padding: 2%;
+    font-size: 1.25em;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+    align-items: center;
+}
+.GameIdDet{
+    width:80%;
+    height: 40%;
+    padding: 2%;
+    font-size: 1.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+/* .navs {} */
+ /* @media only screen and (min-device-width: 481px) and (max-device-width: 900px){
+    
+} */

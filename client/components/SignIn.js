@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import HeaderImg from './HeaderImg';
 const headerImg = require('../img/sig.gif');
+import firebase from '../../src/firebase';
 
 const inpStyle = {
   width: '80%',
@@ -14,9 +15,15 @@ const inpStyle = {
 function SignInDet() {
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
+  const [User, setUser] = useState(null);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    try {
+      firebase.auth().signInWithEmailAndPassword(Email, Password);
+    } catch (err) {
+      console.error('this is during SignIn ' + err.message);
+    }
   }
 
   return (
@@ -41,6 +48,7 @@ function SignInDet() {
           value={Password}
         />
         <Button
+          type="submit"
           variant="dark"
           style={{
             width: '30%',
@@ -51,8 +59,8 @@ function SignInDet() {
           Sign in
         </Button>
       </form>
-      {Email}
       {Password}
+      {User}
     </Col>
   );
 }

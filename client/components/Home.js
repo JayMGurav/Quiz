@@ -4,15 +4,17 @@ import { Link, Router } from '@reach/router';
 import HomePage from './HomePage';
 import About from './About';
 import GameId from './GameId';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 
-const NavLink = props => (
+export const NavLink = props => (
   <Link
     {...props}
     getProps={({ isCurrent }) => {
       return {
         style: {
           padding: '2%',
-          color: isCurrent ? '#f2f2f2' : '#343a40',
+          color: isCurrent ? '#f2f2f2' : '#777777',
           background: isCurrent ? '#343a40' : 'inherit',
           textDecoration: 'none',
           border: 'none',
@@ -30,7 +32,9 @@ function Menu() {
       className="Navbar"
       style={{ margin: '0', padding: '0', zIndex: '99999' }}
     >
-      <div className="logo">QZ</div>
+      <Link to="/" style={{ textDecoration: 'none', color: '#343a40' }}>
+        <div className="logo">QZ</div>
+      </Link>
       <nav className="navs">
         <NavLink to="/">Home</NavLink>
         <NavLink to="/gameId">Enter game id</NavLink>
@@ -48,6 +52,8 @@ function Home() {
         <HomePage path="/" />
         <About path="/aboutus" />
         <GameId path="gameId" />
+        <SignUp path="/signUp" />
+        <SignIn path="/signIn" />
       </Router>
       <Menu />
     </Fragment>
@@ -55,7 +61,3 @@ function Home() {
 }
 
 export default Home;
-
-// <Router>
-//   <HomePage path="/" />
-// </Router>;

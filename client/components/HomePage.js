@@ -2,10 +2,11 @@ import React from 'react';
 const headerImg = require('../img/h-min.gif');
 import HeaderImg from './HeaderImg';
 import { Row, Col, Button } from 'react-bootstrap';
+import { Link } from '@reach/router';
 
 function HomeDet() {
   const b = {
-    width: '30%',
+    width: '150%',
     fontSize: '1.0em',
     fontWeight: 'bold',
   };
@@ -32,12 +33,16 @@ function HomeDet() {
         </p>
       </div>
       <div className="Btnn">
-        <Button variant="outline-dark" style={b}>
-          Sign up
-        </Button>
-        <Button variant="dark" style={b}>
-          Sign in
-        </Button>
+        <Link to="/signUp">
+          <Button variant="outline-dark" style={b}>
+            Sign up
+          </Button>
+        </Link>
+        <Link to="/signIn">
+          <Button variant="dark" style={b}>
+            Sign in
+          </Button>
+        </Link>
       </div>
     </Col>
   );

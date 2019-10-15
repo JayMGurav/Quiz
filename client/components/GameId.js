@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import HeaderImg from './HeaderImg';
-const headerImg = require('../img/gamePin.gif');
+const headerImg = require('../img/gameId.png');
+
+const inpSty = {
+  width: '80%',
+  fontSize: '1.0em',
+  border: 'none',
+  borderBottom: '2px solid #000',
+  padding: '2%',
+  background: 'inherit',
+};
 
 function GameDet() {
   const [GameId, setGameId] = useState('');
+  const [playerName, setPlayerName] = useState('');
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -24,14 +34,16 @@ function GameDet() {
           placeholder="Enter Game Id..."
           onChange={e => setGameId(e.target.value)}
           onBlur={e => setGameId(e.target.value)}
-          style={{
-            width: '80%',
-            fontSize: '1.0em',
-            border: 'none',
-            borderBottom: '2px solid #000',
-            padding: '2%',
-            background: 'inherit',
-          }}
+          style={inpSty}
+        />
+        <input
+          type="text"
+          name="playerName"
+          value={playerName}
+          placeholder="Enter Name..."
+          onChange={e => setPlayerName(e.target.value)}
+          onBlur={e => setPlayerName(e.target.value)}
+          style={inpSty}
         />
         <Button variant="dark">Enter Game</Button>
       </form>

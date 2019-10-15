@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import HeaderImg from './HeaderImg';
 const headerImg = require('../img/sit.jpg');
+import { auth, createUserProfileDoc } from '../../src/firebase';
 
 const inpStyle = {
   width: '80%',
@@ -18,8 +19,17 @@ function SignUpDet() {
   const [Password, setPassword] = useState('');
   const [ConfirmPassword, setConfirmPassword] = useState('');
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    try {
+      const { user } = await auth.createUserWithEmailAndPassword(
+        Email,
+        Password,
+      );
+      user ? createUserProfileDoc(user, { Username }) : null;
+    } catch (err) {
+      console.error('In signUp page ' + err.message);
+    }
   }
 
   return (
@@ -28,7 +38,10 @@ function SignUpDet() {
       lg={window.innerWidth < 992 ? 12 : 5}
       style={{ padding: '0', background: '#f2f2f2' }}
     >
-      <form className="center_Align signInDet" onSubmit={e => handleSubmit(e)}>
+      <form
+        className="center_Align signInDet"
+        onSubmit={e => this.handleSubmit(e)}
+      >
         <input
           type="text"
           placeholder="Username..."
@@ -73,6 +86,7 @@ function SignUpDet() {
             fontWeight: 'bold',
             marginTop: '30px',
           }}
+          onClick={e => handleSubmit(e)}
         >
           Sign up
         </Button>
