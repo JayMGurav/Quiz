@@ -49,15 +49,35 @@ export const getUserDoc = async uid => {
   try {
     const data = await firestore.doc(`user/${uid}`).get();
     const data2 = data.data();
-    // await firestore.doc(`user/${uid}`).onSnapshot(function(doc) {
-    //   return { uid, ...doc.data() };
-    // });
     return { uid, ...data2 };
   } catch (err) {
     console.error('during getUserDoc ' + err.message);
   }
 };
 
-//
+//create Qz
+export const createQz = async (uid, Qid, name, timeperiod, NoQues) => {
+  if (!uid) return;
+  const roomsRef = firestore
+    .collection('user')
+    .doc(uid)
+    .collection('Qzs')
+    .doc(Qid);
+
+  const coll = await roomsRef.get();
+  if (!coll.exists) {
+    const createdAt = new Date();
+    try {
+      roomsRef.set({
+        createdAt,
+        name,
+        timeperiod,
+        NoQues,
+      });
+    } catch (err) {
+      console.error('during createQz ' + err.message);
+    }
+  }
+};
 
 export default firebase;

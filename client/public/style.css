@@ -40,7 +40,12 @@ html{
     bottom: 0;
     margin: auto;
 }
-
+.flexCenterAlign{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .Btnn{
     width: 100%;
     display: flex;

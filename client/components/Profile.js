@@ -18,7 +18,7 @@ const inpStyle = {
   fontSize: '1.25em',
 };
 //take Quiz modal component called using portal
-class TakeQzModal extends Component {
+export class TakeQzModal extends Component {
   constructor(props) {
     super(props);
     this.container = document.createElement('div');
@@ -148,7 +148,7 @@ function Profile({ user }) {
           style={b}
           onClick={() => setShowModal(!showModal)}
         >
-          Take a quiz
+          Take a Qz
         </Button>
 
         {showModal && (
