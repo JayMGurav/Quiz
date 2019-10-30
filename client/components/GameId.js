@@ -18,6 +18,10 @@ function GameDet() {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    //update in Qz players list
+    //then redirect to rules page...!!!
+    //wait until the state of the game changes
   }
 
   return (

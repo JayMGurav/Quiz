@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { async } from 'q';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBks9rZ69SSw8XZaudZq_honmL6pV7Elek',
@@ -56,7 +57,7 @@ export const getUserDoc = async uid => {
 };
 
 //create Qz
-export const createQz = async (uid, Qid, name, timeperiod, NoQues) => {
+export const createQz = async (uid, Qid, Qz) => {
   if (!uid) return;
   const roomsRef = firestore
     .collection('user')
@@ -70,14 +71,64 @@ export const createQz = async (uid, Qid, name, timeperiod, NoQues) => {
     try {
       roomsRef.set({
         createdAt,
-        name,
-        timeperiod,
-        NoQues,
+        tag: 'saved',
+        status: 'waiting',
+        ...Qz,
       });
     } catch (err) {
       console.error('during createQz ' + err.message);
     }
   }
+  return getQzDoc(uid, Qid);
 };
+
+export const getQzDoc = async (uid, Qid) => {
+  // console.log(uid + ':::' + Qid);
+  if (!uid && !Qid) return;
+  try {
+    const data = await firestore.doc(`user/${uid}/Qzs/${Qid}`).get();
+    if (data.exists) {
+      const data2 = data.data();
+      return { uid, ...data2 };
+    } else {
+      return {
+        status: null,
+        Qid,
+        uid,
+      };
+    }
+  } catch (err) {
+    console.error('during getQzDoc ' + err.message);
+  }
+};
+
+//get doc with the tag "saved " || "taken"
+
+export const getList = async (uid, tag) => {
+  if (!uid && !tag) return;
+
+  // console.log(uid);
+  const arr = firestore
+    .collection(`user/${uid}/Qzs`)
+    .where('tag', '==', tag)
+    .get()
+    .then(function(querySnapshot) {
+      const qzArr = [];
+      querySnapshot.forEach(function(doc) {
+        const id = doc.id;
+        const data = doc.data();
+        // console.log(id + 'hello');
+        qzArr.push({ id, ...data });
+      });
+      return qzArr;
+    })
+    .catch(function(error) {
+      console.log('Error getting documents: ', error);
+    });
+  return arr;
+};
+
+//once Qz started change its status to joining and get snapShot
+//then again if started change it to started
 
 export default firebase;

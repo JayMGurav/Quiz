@@ -125,8 +125,7 @@ html{
     background: #fff;
     box-shadow: 0px 3px 10px rgba(75, 75, 75, 0.3);
 }
-.optionBox{
-    
+.optionBox{    
     width: 80%;
     height: 60%;
     margin: 2% auto;
@@ -186,8 +185,61 @@ html{
     box-shadow: 0px 6px 10px rgba(75, 75, 75, 0.2);
 
 }
+.list_sty{
+    width: 95%;
+    /* height: 100px; */
+    letter-spacing: 1px;
+    padding: 2%;
+    margin: 1%;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    box-shadow: 0px 3px 6px rgba(75, 75, 75, 0.2);
+}
+.list_sty:hover{
+    background: #343a40;
+    color: #fff;
+}
+.flexRow{
+    display: flex;
+    flex-direction: row;
+}
+.qzDet{
+    width: 80%;
+    margin: auto;
+    letter-spacing: 1px;
+    background: #fff;
+    color: #343a40;
+    border-radius: 8px;
+    padding: 2%;
+    box-shadow: 0px 3px 6px rgba(75, 75, 75, 0.2);
+}
+.darkSty{
+    background: #343a40;
+    color: #fff;
+    /* display: flex;
+    flex-direction: row;
+    justify-content: space-between; */
+    padding: 2%;
+    margin: 1% auto;
+    
+}
+.scrollDes{
+    overflow-y: auto;
+}
+.BottomPos{
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
 
-/* .navs {} */
+
+
+
+
 @media only screen and (max-width: 600px) and (min-width: 300px) {
     .optionBox{
         width: 100%;

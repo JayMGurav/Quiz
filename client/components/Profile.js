@@ -1,8 +1,9 @@
 import React, { Fragment, useState, Component } from 'react';
 import { createPortal } from 'react-dom';
 import { Button, Card, Modal, Form, Row, Col } from 'react-bootstrap';
-import firebase from '../../src/firebase';
-import { Router, navigate } from '@reach/router';
+import firebase, { getQzDoc } from '../../src/firebase';
+import { navigate } from '@reach/router';
+import { sha256 } from 'js-sha256';
 
 const b = {
   fontSize: '1.0em',
@@ -21,6 +22,12 @@ const inpStyle = {
 export class TakeQzModal extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      name: '',
+      noQs: 0,
+      timeperiod: 0,
+    };
+    //contains the state of questions in the same modal
     this.container = document.createElement('div');
     document.body.appendChild(this.container);
   }
@@ -28,11 +35,25 @@ export class TakeQzModal extends Component {
   componentWillUnmount() {
     document.body.removeChild(this.container);
   }
+
+  createQid = name => {
+    const Qid = sha256(name).slice(0, 10);
+    return getQzDoc(this.props.uid, Qid).then(data => {
+      return data;
+    });
+  };
+
   handleSubmit = () => {
-    //set state of no fo q,time,name of qz
-    //and then post it to server side for creating document in firebase
-    //navigate to Questions part
-    navigate('/dash/questions');
+    this.createQid(this.state.name).then(d => {
+      if (d.status === null) {
+        navigate(
+          `/dash/question/${d.Qid}/${this.state.name}/${this.state.noQs}/${this.state.timeperiod}`,
+        );
+      } else {
+        //change this to some message
+        alert('There is already a Qz saved By this name');
+      }
+    });
   };
   render() {
     return createPortal(
@@ -59,6 +80,11 @@ export class TakeQzModal extends Component {
                     style={inpStyle}
                     type="text"
                     placeholder="Titans"
+                    name="name"
+                    value={this.state.name}
+                    onChange={event =>
+                      this.setState({ name: event.target.value })
+                    }
                   />
                 </Col>
               </Form.Group>
@@ -70,25 +96,35 @@ export class TakeQzModal extends Component {
                   <Form.Control
                     style={inpStyle}
                     type="number"
-                    min="5"
+                    name="noQs"
+                    value={this.state.noQs}
+                    min="2" //change this later
                     max="30"
                     step="5"
                     placeholder="5-30"
+                    onChange={event =>
+                      this.setState({ noQs: event.target.value })
+                    }
                   />
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="formTimePeriod">
                 <Form.Label column sm={5} style={inpStyle}>
-                  Time-period between each Question
+                  Time-period between each Question(is seconds)
                 </Form.Label>
                 <Col sm={6}>
                   <Form.Control
                     type="number"
                     style={inpStyle}
+                    name="timeperiod"
+                    value={this.state.timeperiod}
                     min="10"
                     max="30"
                     step="10"
                     placeholder="10,20 or 30"
+                    onChange={event =>
+                      this.setState({ timeperiod: event.target.value })
+                    }
                   />
                 </Col>
               </Form.Group>
@@ -148,11 +184,15 @@ function Profile({ user }) {
           style={b}
           onClick={() => setShowModal(!showModal)}
         >
-          Take a Qz
+          Create a Qz
         </Button>
 
         {showModal && (
-          <TakeQzModal show={showModal} onHide={() => setShowModal(false)} />
+          <TakeQzModal
+            show={showModal}
+            onHide={() => setShowModal(false)}
+            uid={user.uid}
+          />
         )}
         <Button
           variant="outline-dark"

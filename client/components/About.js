@@ -9,7 +9,7 @@ function AboutDet() {
       <div className="center_Align AboutDet">
         <h1>About us</h1>
         <p>
-          Hi!, We are Qz We are on our mission to make learning awesome and
+          Hi!, We are Qz, we are on our mission to make learning awesome and
           unlock the deepest potential of each and every learner by making
           learning fun and engaging through games. We want to improve education
           all over the world and help everyone of any age,aptitude or
