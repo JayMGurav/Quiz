@@ -6,7 +6,7 @@ import About from './About';
 import GameId from './GameId';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
-
+import GameApp from './GameApp';
 export const NavLink = props => (
   <Link
     {...props}
@@ -56,6 +56,9 @@ function Home() {
         <SignIn path="/signIn" />
       </Router>
       <Menu />
+      <Router>
+        <GameApp path="/game" />
+      </Router>
     </Fragment>
   );
 }

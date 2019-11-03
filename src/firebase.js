@@ -2,6 +2,7 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
 import { async } from 'q';
+import { Details } from '../client/components/Qzlists';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBks9rZ69SSw8XZaudZq_honmL6pV7Elek',
@@ -23,7 +24,7 @@ export const firestore = firebase.firestore();
 //create user profile doc in user coll
 export const createUserProfileDoc = async (user, addData) => {
   if (!user) return;
-
+  console.log('During createUserProfileDoc');
   const userCollRef = firestore.collection(`user`).doc(user.uid);
   const coll = await userCollRef.get();
   if (!coll.exists) {
@@ -34,19 +35,19 @@ export const createUserProfileDoc = async (user, addData) => {
         email,
         createdAt,
         ...addData,
-        savedQz: [],
         qzTaken: [],
+        savedQz: [],
       });
     } catch (err) {
       console.error('during setting user Profile ' + err.message);
     }
   }
-  return getUserDoc(user.uid);
 };
 
 // to get document from userId
 export const getUserDoc = async uid => {
   if (!uid) return;
+  console.log('During getUserDoc');
   try {
     const data = await firestore.doc(`user/${uid}`).get();
     const data2 = data.data();
@@ -59,34 +60,32 @@ export const getUserDoc = async uid => {
 //create Qz
 export const createQz = async (uid, Qid, Qz) => {
   if (!uid) return;
-  const roomsRef = firestore
-    .collection('user')
-    .doc(uid)
-    .collection('Qzs')
-    .doc(Qid);
-
+  console.log('During createQz');
+  const roomsRef = firestore.collection('room').doc(Qid);
   const coll = await roomsRef.get();
   if (!coll.exists) {
     const createdAt = new Date();
     try {
       roomsRef.set({
         createdAt,
+        uid: uid,
         tag: 'saved',
-        status: 'waiting',
+        status: 'notStarted',
         ...Qz,
       });
+      return 'Created';
     } catch (err) {
       console.error('during createQz ' + err.message);
     }
   }
-  return getQzDoc(uid, Qid);
 };
 
 export const getQzDoc = async (uid, Qid) => {
-  // console.log(uid + ':::' + Qid);
+  console.log('During getQzDoc');
   if (!uid && !Qid) return;
   try {
-    const data = await firestore.doc(`user/${uid}/Qzs/${Qid}`).get();
+    const data = await firestore.doc(`room/${Qid}`).get();
+    console.log('durimg getQz :: ' + data.exists);
     if (data.exists) {
       const data2 = data.data();
       return { uid, ...data2 };
@@ -106,18 +105,17 @@ export const getQzDoc = async (uid, Qid) => {
 
 export const getList = async (uid, tag) => {
   if (!uid && !tag) return;
-
-  // console.log(uid);
-  const arr = firestore
-    .collection(`user/${uid}/Qzs`)
-    .where('tag', '==', tag)
+  console.log('During getList');
+  let query = firestore.collection('room');
+  query = query.where('uid', '==', uid);
+  query = query.where('tag', '==', tag);
+  const arr = query
     .get()
     .then(function(querySnapshot) {
       const qzArr = [];
       querySnapshot.forEach(function(doc) {
         const id = doc.id;
         const data = doc.data();
-        // console.log(id + 'hello');
         qzArr.push({ id, ...data });
       });
       return qzArr;
@@ -128,7 +126,59 @@ export const getList = async (uid, tag) => {
   return arr;
 };
 
-//once Qz started change its status to joining and get snapShot
+//once Qz start is clicked change its status to joining and  --returns status
 //then again if started change it to started
+
+export const changeQzStatus = async (uid, qid, status) => {
+  if (!uid && !qid) return;
+  const roomsRef = firestore.collection('room').doc(qid);
+
+  console.log(uid, qid, status);
+  const coll = await roomsRef.get();
+
+  if (coll.exists) {
+    try {
+      await roomsRef.update({
+        status: status,
+      });
+      const doc = await getQzDoc(uid, qid);
+      return doc.status;
+    } catch (err) {
+      console.error('during changing status ' + err.message);
+    }
+  }
+};
+
+export const getQzStatus = async qid => {
+  if (!qid) return;
+
+  const qzRef = firestore.collection('room').doc(qid);
+  try {
+    const getDoc = await qzRef.get();
+    if (getDoc.exists) {
+      const data = getDoc.data();
+      return data.status;
+    }
+  } catch (err) {
+    console.log('during getQzStatus ' + err.message);
+  }
+};
+
+//create player
+export const createQzPlayer = async (Qid, Plyr) => {
+  if (!Qid) return;
+  const roomsRef = firestore.collection('room').doc(Qid);
+  const coll = await roomsRef.get();
+  if (coll.exists) {
+    try {
+      await roomsRef.update({
+        players: firebase.firestore.FieldValue.arrayUnion(Plyr),
+      });
+      return ['Created', Plyr];
+    } catch (err) {
+      console.error('during createQz ' + err.message);
+    }
+  }
+};
 
 export default firebase;

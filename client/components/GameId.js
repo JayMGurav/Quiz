@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Alert } from 'react-bootstrap';
 import HeaderImg from './HeaderImg';
+import { getQzStatus, createQzPlayer } from '../../src/firebase.js';
+import { navigate } from '@reach/router';
 const headerImg = require('../img/gameId.png');
 
 const inpSty = {
@@ -15,13 +17,38 @@ const inpSty = {
 function GameDet() {
   const [GameId, setGameId] = useState('');
   const [playerName, setPlayerName] = useState('');
+  const [error, setError] = useState('');
+  let Plyr = {
+    name: '',
+    score: 0,
+    rank: 0,
+    correct: 0,
+    inCorrect: 0,
+  };
 
+  //check for uniqueness
   function handleSubmit(e) {
     e.preventDefault();
-
-    //update in Qz players list
-    //then redirect to rules page...!!!
-    //wait until the state of the game changes
+    Plyr.name = playerName;
+    getQzStatus(GameId)
+      .then(status => {
+        if (status === 'joining') {
+          createQzPlayer(GameId, Plyr).then(d => {
+            navigate('/game', {
+              state: {
+                user: 'Player',
+                plyr: { ...d[1], qid: GameId },
+                status: status,
+              },
+            });
+          });
+        } else if (status === 'notStarted') {
+          setError('" THE GAME HAS NOT YET STARTED..!! "');
+        }
+      })
+      .catch(err =>
+        console.error('During GameId changeStatue : ' + err.message),
+      );
   }
 
   return (
@@ -31,6 +58,12 @@ function GameDet() {
       style={{ background: '#f2f2f2', padding: '0' }}
     >
       <form className="center_Align GameIdDet" onSubmit={e => handleSubmit(e)}>
+        {error == '' ? null : (
+          <Alert variant="danger">
+            <h6>Wait buddy {error}</h6>
+          </Alert>
+        )}
+        <br />
         <input
           type="text"
           name="GameId"
@@ -49,7 +82,10 @@ function GameDet() {
           onBlur={e => setPlayerName(e.target.value)}
           style={inpSty}
         />
-        <Button variant="dark">Enter Game</Button>
+        <br />
+        <Button variant="dark" onClick={event => handleSubmit(event)}>
+          Enter Game
+        </Button>
       </form>
     </Col>
   );

@@ -37,7 +37,8 @@ export class TakeQzModal extends Component {
   }
 
   createQid = name => {
-    const Qid = sha256(name).slice(0, 10);
+    const Qid = sha256(this.props.uid + name).slice(0, 10);
+    console.log(Qid);
     return getQzDoc(this.props.uid, Qid).then(data => {
       return data;
     });

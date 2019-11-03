@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { getList } from '../../src/firebase.js';
+import { getList, changeQzStatus } from '../../src/firebase.js';
 import { navigate } from '@reach/router';
 import { Button, Row, Col } from 'react-bootstrap';
 
@@ -11,7 +11,7 @@ export function SavedQzList({ uid, loading }) {
     h.then(d => {
       setSavedQz(d);
     });
-  }, [loading]);
+  }, []);
 
   return (
     <div className="header_img flexCenterAlign scrollDes">
@@ -32,21 +32,19 @@ export function SavedQzList({ uid, loading }) {
 
 export function TakenQzList({ uid, saved, loading }) {
   const [takenQz, settakenQz] = useState([]);
-
+  console.log(loading + ' :::: ' + saved);
   useEffect(() => {
     const h = getList(uid, 'taken');
     h.then(d => {
       settakenQz(d);
     });
-  }, [loading]);
+  }, []);
 
   return (
     <div className="header_img flexCenterAlign scrollDes">
       {loading ? (
         <h1>Loading...</h1>
-      ) : takenQz.length > 0 ? (
-        <ListIt data={takenQz} />
-      ) : (
+      ) : takenQz.length == 0 ? (
         <div style={{ color: '#343a40', marginTop: '4%', textAlign: 'center' }}>
           <h4>No Qz yet..!!</h4>
           <h1>Start taking ur first Qz</h1>
@@ -56,11 +54,14 @@ export function TakenQzList({ uid, saved, loading }) {
             <h5>Go to Saved Quizzes and take one</h5>
           )}
         </div>
+      ) : (
+        <ListIt data={takenQz} />
       )}
     </div>
   );
 }
 
+//lists whatever Qz it has given
 function ListIt({ data }) {
   const handleClick = qz => {
     navigate(`/dash/${qz.id}`, { state: { Qz: qz } });
@@ -84,16 +85,37 @@ function ListIt({ data }) {
               <h5>Questions</h5>
             </div>
           </div>
-          // </Link>
         );
       })}
     </Fragment>
   );
 }
 
+//Qz detail
 export function Details(props) {
   const [qz, setQz] = useState(props.location.state.Qz);
-  console.log(qz);
+  const changeStatus = (uid, qid, status) => {
+    return changeQzStatus(uid, qid, status).then(status => {
+      return status;
+    });
+  };
+
+  const handleClick = async (e, qid) => {
+    e.preventDefault();
+    changeStatus(props.uid, qid, 'joining')
+      .then(status => {
+        navigate('/game', {
+          state: {
+            user: 'user',
+            usrData: { uid: props.uid, qid, status: status },
+          },
+        });
+      })
+      .catch(err =>
+        console.error('During Qzlist changeStatue : ' + err.message),
+      );
+  };
+
   return (
     <div className="header_img" style={{ margin: 'auto' }}>
       <Row className="qzDet darkSty" style={{ margin: '1% auto' }}>
@@ -110,7 +132,10 @@ export function Details(props) {
           <h5>Time-period</h5>
         </Col>
       </Row>
-      <div className="qzDet scrollDes" style={{ height: '70vh' }}>
+      <div
+        className="qzDet scrollDes"
+        style={{ height: '70vh', padding: '2%' }}
+      >
         {qz.questions.map((ques, index) => {
           return (
             <div key={index}>
@@ -157,33 +182,13 @@ export function Details(props) {
           );
         })}
       </div>
-      <Button variant="dark" className="BottomPos">
+      <Button
+        variant="dark"
+        className="BottomPos"
+        onClick={event => handleClick(event, qz.id)}
+      >
         Start Qz
       </Button>
     </div>
   );
 }
-
-// <div className="qzDet darkSty">
-//   <div>
-//     <h1>{qz.name}</h1>
-//     <h5>Id : {qz.id}</h5>
-//   </div>
-//   <div
-//     style={{
-//       width: '40%',
-//       display: 'flex',
-//       flexDirection: 'row',
-//       justifyContent: 'space-evenly',
-//     }}
-//   >
-//     <div style={{ textAlign: 'center' }}>
-//       <h1>{qz.questions.length}</h1>
-//       <h5>Questions</h5>
-//     </div>
-//     <div style={{ textAlign: 'center' }}>
-//       <h1>{qz.timeperiod}s</h1>
-//       <h5>Time-period</h5>
-//     </div>
-//   </div>
-// </div>;

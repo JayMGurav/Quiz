@@ -29,7 +29,6 @@ function SetQuestion(props) {
         .doc(`user/${props.uid}`)
         .update({
           savedQz: firebase.firestore.FieldValue.arrayUnion(props.Qid),
-          // savedQz.push(props.Qid)
         })
         .then(() => {
           Qz.questions = [];
@@ -41,6 +40,7 @@ function SetQuestion(props) {
         });
     }); //add tag as saved
   };
+
   const handleCounter = e => {
     if (count < props.noQs) {
       SetCount(count + 1);
