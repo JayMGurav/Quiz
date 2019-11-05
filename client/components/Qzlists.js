@@ -107,7 +107,9 @@ export function Details(props) {
         navigate('/game', {
           state: {
             user: 'user',
-            usrData: { uid: props.uid, qid, status: status },
+            uid: props.uid,
+            qid,
+            status: status,
           },
         });
       })

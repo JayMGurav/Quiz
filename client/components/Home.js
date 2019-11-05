@@ -6,7 +6,7 @@ import About from './About';
 import GameId from './GameId';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
-import GameApp from './GameApp';
+// import { Countdown } from './Started';
 export const NavLink = props => (
   <Link
     {...props}
@@ -51,16 +51,15 @@ function Home() {
       <Router>
         <HomePage path="/" />
         <About path="/aboutus" />
+
         <GameId path="gameId" />
         <SignUp path="/signUp" />
         <SignIn path="/signIn" />
       </Router>
       <Menu />
-      <Router>
-        <GameApp path="/game" />
-      </Router>
     </Fragment>
   );
 }
+// <Countdown path="/contactus" />
 
 export default Home;

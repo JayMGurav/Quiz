@@ -181,4 +181,21 @@ export const createQzPlayer = async (Qid, Plyr) => {
   }
 };
 
+export const getPlayer = async (qid, pid) => {
+  if (!qid && !pid) return;
+
+  const plyrRef = firestore.collection('room').doc(qid);
+  const doc = plyrRef.get();
+  if (doc.exists) {
+    const data = await plyrRef.where('players', 'array-contains', pid).get();
+    const val = data.data();
+    console.log(val);
+    if (val) {
+      return [val, null];
+    } else {
+      return [null, pid];
+    }
+  }
+};
+
 export default firebase;

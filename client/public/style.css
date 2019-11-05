@@ -3,7 +3,12 @@ body{
     margin:0;
     padding: 0;
     width:100%;
-
+    -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 html{
@@ -11,6 +16,10 @@ html{
     padding: 0;
 }
 
+
+.fullWidth{
+    width:100%;
+}
 .height_Onescreen{
     height: 100vh;
     margin: 0%;
@@ -26,13 +35,14 @@ html{
     padding: 2%;
     text-align: right;
     font-size:1.5em;
-    color: #343a40;
+    color: #393a40;
 }
 .homeDet h1{
     font-weight: bolder;
     letter-spacing: 0.125ch;
 }
 .center_Align{
+    z-index: 9999;
     position: absolute;
     top: 0;
     left: 0;
@@ -236,9 +246,81 @@ html{
     transform: translate(-50%,-50%);
 }
 
+.flexStart{
+    display: flex;
+    flex-direction: column;
+    justify-content: first baseline;
+}
 
+/* for bubble and rules animation */
+.hooks-main > svg {
+  display: none;
+}
 
+.hooks-main > div {
+  position: absolute;
+  will-change: transform;
+  border-radius: 50%;
+  background: lightcoral;
+  box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
+  opacity: 0.6;
+}
 
+.hooks-main > div:nth-child(1) {
+  width: 120px;
+  height: 120px;
+}
+
+.hooks-main > div:nth-child(2) {
+  width: 250px;
+  height: 250px;
+}
+
+.hooks-main > div:nth-child(3) {
+  width: 150px;
+  height: 150px;
+}
+
+.hooks-main > div::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.hooks-main > div:nth-child(2)::after {
+  top: 70px;
+  left: 70px;
+  width: 70px;
+  height: 70px;
+}
+
+.hooks-main > div:nth-child(3)::after {
+  top: 50px;
+  left: 50px;
+  width: 50px;
+  height: 50px;
+}
+
+.hooks-main {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  filter: url('#goo');
+  overflow: hidden;
+}
+.rules{
+    font-weight: bold;
+}
+
+.script-box {
+  will-change: width, height, left, top;
+  position: relative;
+}
 
 @media only screen and (max-width: 600px) and (min-width: 300px) {
     .optionBox{

@@ -1,10 +1,23 @@
 import React, { useContext } from 'react';
-// import { GameContext } from './GameContext.js';
+import { ParentGameContext } from './GameContext.js';
 import DispIdNPlyrs from './DispIdNPlyrs.js';
-function UserGame({ data }) {
-  // const context = useContext(GameContext);
+import { Countdown } from './Started';
 
-  return <DispIdNPlyrs uid={data} />;
+function UserGame({ uid }) {
+  const context = useContext(ParentGameContext);
+  console.log(uid);
+  // return <h1>Hello</h1>;
+  if (context.status === 'joining') {
+    return <DispIdNPlyrs uid={uid} />;
+  } else if (context.status === 'Started') {
+    return (
+      <div>
+        <Countdown />
+      </div>
+    );
+  } else {
+    return <h1>None</h1>;
+  }
 }
 
 export default UserGame;
