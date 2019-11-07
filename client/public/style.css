@@ -377,6 +377,10 @@ html{
 
 
 @media only screen and (max-width: 600px) and (min-width: 300px) {
+    .navs{
+    width: 80%;
+    right: 2%;
+}
     .optionBox{
         width: 100%;
         margin: 2% 0%;
@@ -392,5 +396,12 @@ html{
 }
 .profileDet{
     flex-direction: column;
+}
+}
+
+@media only screen and (max-width: 870px) and (min-width: 600px) {
+     .navs{
+    width: 80%;
+    right: 2%;
 }
 }

@@ -168,13 +168,24 @@ export const getQzStatus = async qid => {
 //create player
 export const createQzPlayer = async (Qid, Plyr) => {
   if (!Qid) return;
-  const roomsRef = firestore.collection('room').doc(Qid);
+  const roomsRef = firestore
+    .collection('room')
+    .doc(Qid)
+    .collection('Players')
+    .doc(Plyr.id);
   const coll = await roomsRef.get();
-  if (coll.exists) {
+  if (!coll.exists) {
     try {
-      await roomsRef.update({
-        players: firebase.firestore.FieldValue.arrayUnion(Plyr),
+      console.log(Plyr.name);
+      await roomsRef.set({
+        ...Plyr,
       });
+      await firestore
+        .collection('room')
+        .doc(Qid)
+        .update({
+          players: firebase.firestore.FieldValue.arrayUnion(Plyr.name),
+        });
       return ['Created', Plyr];
     } catch (err) {
       console.error('during createQz ' + err.message);
@@ -184,17 +195,21 @@ export const createQzPlayer = async (Qid, Plyr) => {
 
 export const getPlayer = async (qid, pid) => {
   if (!qid && !pid) return;
-  const plyrRef = firestore.collection('room').doc(qid);
+  const plyrRef = firestore
+    .collection('room')
+    .doc(qid)
+    .collection('Players')
+    .doc(pid);
   const doc = await plyrRef.get();
-  if (doc.exists) {
-    try {
-      const { players } = doc.data();
-      const val = players.find(o => o.id === pid);
-      return [val, pid];
-    } catch (err) {
-      console.log('during getPlayer ' + err.message);
-    }
-  }
+  // if (doc.exists) {
+  // try {
+  //   // const { players } = doc.data();
+  //   // const val = players.find(o => o.id === pid);
+  return [doc.exists, pid, doc.data()];
+  // } catch (err) {
+  //   console.log('during getPlayer ' + err.message);
+  // }
+  // }
 };
 
 export const changeQuestionStatus = async (uid, qid, Qstatus) => {
@@ -225,6 +240,28 @@ export const getQuestions = async (uid, qid, index) => {
     return Qdata.questions[index];
   } catch (err) {
     console.error('during getQuestions ' + err.message);
+  }
+};
+
+//update score;
+
+export const updateScore = async (qid, pid, score) => {
+  if (!qid && !pid) return;
+
+  const plyrRef = firestore
+    .collection('room')
+    .doc(qid)
+    .collection('Players')
+    .doc(pid);
+  const doc = await plyrRef.get();
+  if (doc.exists) {
+    try {
+      await roomsRef.update({
+        score: firebase.firestore.FieldValue.increment(score),
+      });
+    } catch (err) {
+      console.log('During update Score ' + err.message);
+    }
   }
 };
 

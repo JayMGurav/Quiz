@@ -6,7 +6,6 @@ import About from './About';
 import GameId from './GameId';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
-import { Lol } from './lol.js';
 
 export const NavLink = props => (
   <Link
@@ -15,6 +14,7 @@ export const NavLink = props => (
       return {
         style: {
           padding: '2%',
+          width: 'fit-content',
           color: isCurrent ? '#f2f2f2' : '#777777',
           background: isCurrent ? '#343a40' : 'inherit',
           textDecoration: 'none',
@@ -52,7 +52,6 @@ function Home() {
       <Router>
         <HomePage path="/" />
         <About path="/aboutus" />
-        <Lol path="/contactus" />
         <GameId path="gameId" />
         <SignUp path="/signUp" />
         <SignIn path="/signIn" />

@@ -28,7 +28,7 @@ function PlayerGame({ data }) {
       </div>
     );
   } else if (context.status === 'Question') {
-    return <DispOptions />;
+    return <DispOptions pid={data.id} />;
   } else if (context.status === 'LeaderBoard') {
     return <PlayerLeaderBoard pid={data.id} />;
   } else {

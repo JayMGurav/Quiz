@@ -39,7 +39,7 @@ function GameDet() {
     e.preventDefault();
     createPlayerId(GameId, playerName).then(d => {
       console.log(d);
-      if (d[0] == undefined) {
+      if (d[0] == false) {
         Plyr.id = d[1];
         Plyr.name = playerName;
         getQzStatus(GameId)

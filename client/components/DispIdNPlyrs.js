@@ -73,7 +73,7 @@ function DispIdNPlyrs({ uid }) {
         className="flexStart"
       >
         {plyrs
-          ? plyrs.map(({ name }, index) => {
+          ? plyrs.map((name, index) => {
               return (
                 <div
                   style={{

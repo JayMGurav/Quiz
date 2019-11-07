@@ -12,6 +12,7 @@ function GameContextProvider(props) {
   const [status, setStatus] = useState('notStarted');
   const [Qstatus, setQStatus] = useState(0);
   const [uid, setUid] = useState(null);
+  const [ansStatus, setAnsStatus] = useState('');
 
   useEffect(() => {
     let subscribeerBe = true;
@@ -45,6 +46,10 @@ function GameContextProvider(props) {
       .catch(err =>
         console.error('This is in GameApp changingGameStatus : ' + err.message),
       );
+  };
+
+  const changeAnsStatus = sta => {
+    setAnsStatus(sta);
   };
 
   const changeQStatus = (uid, qid, Qstatus) => {
@@ -88,6 +93,8 @@ function GameContextProvider(props) {
         Qstatus,
         setQid,
         getStatusSnap,
+        ansStatus,
+        changeAnsStatus,
         setUid,
         changeGameStatus,
         changeQStatus,
