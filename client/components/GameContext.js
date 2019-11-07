@@ -1,16 +1,32 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { changeQzStatus, firestore } from '../../src/firebase';
-export const GameContext = createContext(null);
+import {
+  changeQzStatus,
+  changeQuestionStatus,
+  firestore,
+} from '../../src/firebase';
+
 export const ParentGameContext = createContext(null);
+
 function GameContextProvider(props) {
   const [qid, setQid] = useState(null);
   const [status, setStatus] = useState('notStarted');
+  const [Qstatus, setQStatus] = useState(0);
   const [uid, setUid] = useState(null);
+
   useEffect(() => {
-    if (uid && qid) {
+    let subscribeerBe = true;
+    if (subscribeerBe && uid && qid) {
       changeQzStatus(uid, qid, status)
         .then(stat => {
           setStatus(stat);
+          changeQuestionStatus(uid, qid, Qstatus).then(QSt => {
+            setQStatus(QSt);
+          });
+        })
+        .catch(err => {
+          console.error(
+            'This is in GameApp changingQuestionStatus : ' + err.message,
+          );
         })
         .catch(err =>
           console.error(
@@ -18,6 +34,7 @@ function GameContextProvider(props) {
           ),
         );
     }
+    return () => (subscribeerBe = false);
   }, []);
 
   const changeGameStatus = (uid, qid, status) => {
@@ -27,6 +44,16 @@ function GameContextProvider(props) {
       })
       .catch(err =>
         console.error('This is in GameApp changingGameStatus : ' + err.message),
+      );
+  };
+
+  const changeQStatus = (uid, qid, Qstatus) => {
+    changeQuestionStatus(uid, qid, Qstatus)
+      .then(Qstat => {
+        setQStatus(Qstat);
+      })
+      .catch(err =>
+        console.error('This is in GameApp changingQStatus : ' + err.message),
       );
   };
 
@@ -41,10 +68,31 @@ function GameContextProvider(props) {
       });
   };
 
+  const getQStatusSnap = qid => {
+    firestore
+      .collection('room')
+      .doc(qid)
+      .onSnapshot(function(doc) {
+        const data = doc.get('Qstatus');
+        setQStatus(data);
+        // return data;
+      });
+  };
+
   // const value = {qid,status,setQid,setStatus,changeGameStatus}
   return (
     <ParentGameContext.Provider
-      value={{ qid, status, setQid, getStatusSnap, setUid, changeGameStatus }}
+      value={{
+        qid,
+        status,
+        Qstatus,
+        setQid,
+        getStatusSnap,
+        setUid,
+        changeGameStatus,
+        changeQStatus,
+        getQStatusSnap,
+      }}
     >
       {props.children}
     </ParentGameContext.Provider>

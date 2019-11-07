@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Container, Row, Button } from 'react-bootstrap';
-import { GameContext, ParentGameContext } from './GameContext.js';
+import { ParentGameContext } from './GameContext.js';
 import { firestore } from '../../src/firebase.js';
 
 //make a function to generate random color from a give list
@@ -10,8 +10,17 @@ function DispIdNPlyrs({ uid }) {
   const [plyrs, setPlyrs] = useState([]);
 
   console.log(context.status);
+  console.log(context.Qstatus);
+
   useEffect(() => {
     let isSubscribed = true;
+    if (isSubscribed) {
+      getPlayrsSnap();
+    }
+    return () => (isSubscribed = false);
+  }, []);
+
+  const getPlayrsSnap = () => {
     firestore
       .collection('room')
       .doc(context.qid)
@@ -19,8 +28,7 @@ function DispIdNPlyrs({ uid }) {
         const data = doc.get('players');
         setPlyrs(data);
       });
-    return () => (isSubscribed = false);
-  }, []);
+  };
 
   return (
     <Container
@@ -90,7 +98,7 @@ function DispIdNPlyrs({ uid }) {
           variant="outline-dark"
           style={{ fontSize: '1.0em', fontWeight: 'bold' }}
           onClick={() => {
-            context.changeGameStatus(uid, context.qid, 'Started');
+            context.changeGameStatus(uid, context.qid, 'Countdown');
           }}
         >
           Start Qz

@@ -42,7 +42,7 @@ html{
     letter-spacing: 0.125ch;
 }
 .center_Align{
-    z-index: 9999;
+    z-index: 99;
     position: absolute;
     top: 0;
     left: 0;
@@ -321,6 +321,60 @@ html{
   will-change: width, height, left, top;
   position: relative;
 }
+
+.options{
+    width:50%;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #343a40;
+    font-size: 3.0em;
+    font-weight: bold;
+    box-shadow: 0px 3px 10px -5px rgba(72, 72, 72, 0.3);
+    transition: box-shadow 0.3s;
+}
+.options:hover{
+    box-shadow: 0px 3px 10px -5px rgba(72, 72, 72, 0.3);
+    transition: box-shadow 0.5s;
+}
+.cardOpt{
+    box-shadow: 0px 3px 10px -5px rgba(72, 72, 72, 0.3);
+    transition: box-shadow 0.5s;
+  will-change: transform;
+
+}
+.cardOpt:hover {
+  box-shadow: 0px 6px 15px -5px rgba(72, 72, 72, 0.4);
+}
+.counterOptAlign{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.counterSty{
+    z-index:9999;
+    width:10em;
+    height: 10em;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 3px 10px rgba(75, 75, 75, 0.3);
+    color: #343a40;
+}
+.optionsAwBox{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    
+}
+
 
 @media only screen and (max-width: 600px) and (min-width: 300px) {
     .optionBox{

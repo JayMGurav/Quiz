@@ -1,32 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useSpring, animated } from 'react-spring';
-
-// function useInterval(callback, delay) {
-//   const savedCallback = useRef();
-
-//   // Remember the latest callback.
-//   useEffect(() => {
-//     savedCallback.current = callback;
-//   }, [callback]);
-
-//   // Set up the interval.
-//   useEffect(() => {
-//     function tick() {
-//       savedCallback.current();
-//     }
-//     if (delay !== null) {
-//       let id = setInterval(tick, delay);
-//       //   if (tick == 10) {
-//       return () => clearInterval(id);
-//       //   }
-//     }
-//   }, [delay]);
-// }
+import { ParentGameContext } from './GameContext.js';
 
 export function Countdown() {
-  const [seconds, setSeconds] = useState(10);
-  const [readyN, setReadyN] = useState('');
-  var colors = ['lightgreen', 'lightblue', 'lightred', 'lightyellow'];
+  const context = useContext(ParentGameContext);
+  const [seconds, setSeconds] = useState(5);
+  const [readyN, setReadyN] = useState(null);
   useEffect(() => {
     let subscriber = true;
     startCountDown();
@@ -58,6 +37,7 @@ export function Countdown() {
       if (sec === 0) {
         setReadyN('Go!!');
         clearInterval(interval);
+        context.changeGameStatus(context.uid, context.qid, 'Question');
       }
       setSeconds(sec);
       if (sec == 1) {

@@ -3,23 +3,34 @@ import { ParentGameContext } from './GameContext.js';
 import { useTrail, useTransition, animated } from 'react-spring';
 import { Button, ThemeProvider } from 'react-bootstrap';
 import { Countdown } from './Started';
+import { DispOptions } from './DispOptions.js';
+import { PlayerLeaderBoard } from './LeaderBoard.js';
+
 function PlayerGame({ data }) {
   const context = useContext(ParentGameContext);
 
   //for status query
   useEffect(() => {
+    let subscribeer = true;
     context.getStatusSnap(context.qid);
+    // context.getQStatusSnap(context.qid);
+    return () => (subscribeer = false);
   }, [context.status]);
+
   console.log(context.status);
 
   if (context.status === 'joining') {
     return <Rules data={data} context={context} />;
-  } else if (context.status === 'Started') {
+  } else if (context.status === 'Countdown') {
     return (
       <div>
         <Countdown />
       </div>
     );
+  } else if (context.status === 'Question') {
+    return <DispOptions />;
+  } else if (context.status === 'LeaderBoard') {
+    return <PlayerLeaderBoard pid={data.id} />;
   } else {
     return <h1>None</h1>;
   }

@@ -4,6 +4,7 @@ import HeaderImg from './HeaderImg';
 import { getQzStatus, createQzPlayer, getPlayer } from '../../src/firebase.js';
 import { navigate } from '@reach/router';
 import { sha256 } from 'js-sha256';
+
 const headerImg = require('../img/gameId.png');
 
 const inpSty = {
@@ -31,36 +32,42 @@ function GameDet() {
   const createPlayerId = (gameId, name) => {
     const pid = sha256(gameId + name).slice(0, 10);
     console.log(pid);
-    return getPlayer(gameId, pid).then(d => {
-      return d;
-    });
+    return getPlayer(gameId, pid);
   };
   //check for uniqueness
   function handleSubmit(e) {
     e.preventDefault();
-    Plyr.name = playerName;
-    getQzStatus(GameId)
-      .then(status => {
-        if (status === 'joining') {
-          createQzPlayer(GameId, Plyr).then(d => {
-            navigate('/game', {
-              state: {
-                user: 'Player',
-                plyr: { ...d[1], qid: GameId },
-                qid: GameId,
-                status: status,
-              },
-            });
-          });
-        } else if (status === 'notStarted') {
-          setError('Wait buddy " THE GAME HAS NOT YET STARTED..!! "');
-        } else if (status === 'Started') {
-          setError('Too late The game is already begun"..!!');
-        }
-      })
-      .catch(err =>
-        console.error('During GameId changeStatue : ' + err.message),
-      );
+    createPlayerId(GameId, playerName).then(d => {
+      console.log(d);
+      if (d[0] == undefined) {
+        Plyr.id = d[1];
+        Plyr.name = playerName;
+        getQzStatus(GameId)
+          .then(status => {
+            if (status === 'joining') {
+              createQzPlayer(GameId, Plyr).then(d => {
+                navigate('/game', {
+                  state: {
+                    user: 'Player',
+                    plyr: { ...d[1], qid: GameId },
+                    qid: GameId,
+                    status: status,
+                  },
+                });
+              });
+            } else if (status === 'notStarted') {
+              setError('" THE GAME HAS NOT YET STARTED..!! "');
+            } else if (status === 'Started') {
+              setError('Too late The game is already begun"..!!');
+            }
+          })
+          .catch(err =>
+            console.error('During GameId changeStatue : ' + err.message),
+          );
+      } else {
+        setError('This Name already exist, Please Change it..!!');
+      }
+    });
   }
 
   return (

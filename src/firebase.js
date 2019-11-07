@@ -3,6 +3,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import { async } from 'q';
 import { Details } from '../client/components/Qzlists';
+import undefined from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBks9rZ69SSw8XZaudZq_honmL6pV7Elek',
@@ -183,18 +184,47 @@ export const createQzPlayer = async (Qid, Plyr) => {
 
 export const getPlayer = async (qid, pid) => {
   if (!qid && !pid) return;
-
   const plyrRef = firestore.collection('room').doc(qid);
-  const doc = plyrRef.get();
+  const doc = await plyrRef.get();
   if (doc.exists) {
-    const data = await plyrRef.where('players', 'array-contains', pid).get();
-    const val = data.data();
-    console.log(val);
-    if (val) {
-      return [val, null];
-    } else {
-      return [null, pid];
+    try {
+      const { players } = doc.data();
+      const val = players.find(o => o.id === pid);
+      return [val, pid];
+    } catch (err) {
+      console.log('during getPlayer ' + err.message);
     }
+  }
+};
+
+export const changeQuestionStatus = async (uid, qid, Qstatus) => {
+  if (!uid && !qid) return;
+  const roomsRef = firestore.collection('room').doc(qid);
+
+  console.log(uid, qid, Qstatus);
+  const coll = await roomsRef.get();
+
+  if (coll.exists) {
+    try {
+      await roomsRef.update({
+        Qstatus: Qstatus,
+      });
+      const doc = await getQzDoc(uid, qid);
+      return doc.Qstatus;
+    } catch (err) {
+      console.error('during changing status ' + err.message);
+    }
+  }
+};
+
+export const getQuestions = async (uid, qid, index) => {
+  if (!qid) return;
+
+  try {
+    const Qdata = await getQzDoc(uid, qid);
+    return Qdata.questions[index];
+  } catch (err) {
+    console.error('during getQuestions ' + err.message);
   }
 };
 
