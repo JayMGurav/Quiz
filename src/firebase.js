@@ -247,7 +247,8 @@ export const getQuestions = async (uid, qid, index) => {
 
 export const updateScore = async (qid, pid, score) => {
   if (!qid && !pid) return;
-
+  // const roomsRef = firestore.collection('room').doc(qid);
+  console.log(qid, pid, score);
   const plyrRef = firestore
     .collection('room')
     .doc(qid)
@@ -256,7 +257,7 @@ export const updateScore = async (qid, pid, score) => {
   const doc = await plyrRef.get();
   if (doc.exists) {
     try {
-      await roomsRef.update({
+      await plyrRef.update({
         score: firebase.firestore.FieldValue.increment(score),
       });
     } catch (err) {

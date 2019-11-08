@@ -40,7 +40,11 @@ export function DispOptions({ pid }) {
     console.log(enterTime + ' ' + selectTime + ' ' + ' ' + selectedAns);
     console.log(Question);
     if (selectedAns === Question.answer) {
+      console.log('yes');
       setScore((Timeperiod - Math.floor(selectTime - enterTime)) * Timeperiod);
+      context.changeAnsStatus('Correct');
+    } else {
+      context.changeAnsStatus('Wrong');
     }
     setShow(true);
     // ..need to set userAns ans update score accordingly
@@ -69,11 +73,11 @@ export function DispOptions({ pid }) {
     let sec = counterSeconds;
     let interval = setInterval(function() {
       if (sec === 0) {
-        updateScore(context.qid, pid, score);
         clearInterval(interval);
-        context.changeAnsStatus(() => {
-          selectedAns === Question.answer ? 'Correct' : 'Wrong';
-        });
+      }
+      if (sec === 2) {
+        updateScore(context.qid, pid, score);
+        console.log('in Disp Optio' + score);
       }
       setCounterSeconds(sec);
       sec--;

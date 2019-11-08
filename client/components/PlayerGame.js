@@ -13,9 +13,9 @@ function PlayerGame({ data }) {
   useEffect(() => {
     let subscribeer = true;
     context.getStatusSnap(context.qid);
-    // context.getQStatusSnap(context.qid);
+    context.getQStatusSnap(context.qid);
     return () => (subscribeer = false);
-  }, [context.status]);
+  }, [context.status, context.Qstatus]);
 
   console.log(context.status);
 
