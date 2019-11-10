@@ -1,16 +1,12 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Container, Row, Button } from 'react-bootstrap';
 import { ParentGameContext } from './GameContext.js';
 import { firestore } from '../../src/firebase.js';
-
 //make a function to generate random color from a give list
 
 function DispIdNPlyrs({ uid }) {
   const context = useContext(ParentGameContext);
   const [plyrs, setPlyrs] = useState([]);
-
-  console.log(context.status);
-  console.log(context.Qstatus);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -60,7 +56,6 @@ function DispIdNPlyrs({ uid }) {
       </div>
       <div style={{ width: '100%', textAlign: 'center' }}>
         <h1>Joined Players </h1>
-        {context.status}
       </div>
       <Row
         style={{
@@ -73,21 +68,10 @@ function DispIdNPlyrs({ uid }) {
         className="flexStart"
       >
         {plyrs
-          ? plyrs.map((name, index) => {
+          ? plyrs.map((item, key) => {
               return (
-                <div
-                  style={{
-                    width: 'fit-content',
-                    padding: '0% 1%',
-                    margin: '1% 2%',
-                    background: '#343a40',
-                    color: '#f2f2f2',
-                    borderRadius: '4px',
-                    boxShadow: '0px 3px 6px rgba(72,72,72,0.3)',
-                  }}
-                  key={index}
-                >
-                  <h2>{name}</h2>
+                <div className="dispPlayrs" key={key} style={{}}>
+                  <h2>{item}</h2>
                 </div>
               );
             })
@@ -108,3 +92,14 @@ function DispIdNPlyrs({ uid }) {
   );
 }
 export default DispIdNPlyrs;
+
+// ? plyrs.map((name, index) => {
+//     return (
+//       <div
+
+//         key={index}
+//       >
+//         <h2>{name}</h2>
+//       </div>
+//     );
+//   })

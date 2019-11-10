@@ -57,7 +57,6 @@ function GameApp(props) {
     changeGameStatus(props.location.state.uid, Qid, 'joining');
     setLoading(false);
   }, []);
-  console.log(status, qid);
   return loading ? <h1>Loading...</h1> : <Game user={user} data={data} />;
 }
 

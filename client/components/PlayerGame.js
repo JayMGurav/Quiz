@@ -12,12 +12,10 @@ function PlayerGame({ data }) {
   //for status query
   useEffect(() => {
     let subscribeer = true;
-    context.getStatusSnap(context.qid);
     context.getQStatusSnap(context.qid);
+    context.getStatusSnap(context.qid);
     return () => (subscribeer = false);
   }, [context.status, context.Qstatus]);
-
-  console.log(context.status);
 
   if (context.status === 'joining') {
     return <Rules data={data} context={context} />;
@@ -31,8 +29,12 @@ function PlayerGame({ data }) {
     return <DispOptions pid={data.id} />;
   } else if (context.status === 'LeaderBoard') {
     return <PlayerLeaderBoard pid={data.id} />;
+  } else if (context.Qstatus === 2) {
+    return <PlayerLeaderBoard pid={data.id} />;
+  } else if (context.Qstatus === 3) {
+    <Redirect from="/game" to="/" />;
   } else {
-    return <h1>None</h1>;
+    return <h1>Loading..</h1>;
   }
 }
 
@@ -100,15 +102,15 @@ function Rules({ data, context }) {
       >
         <div>
           <h2>
-            Hey {data.name},There are some "RULES" that you should know before
-            Game starts {context.status}
+            Hey {data.name}, There are some "RULES" that you should know{' '}
+            {context.status}
           </h2>
           <Button
             variant="outline-dark"
             style={{ margin: '2%', fontWeight: 'bold' }}
             onClick={() => setToggle(!toggle)}
           >
-            {toggle ? 'Okay..Now let me play' : 'Show the damn Rules'}
+            {toggle ? 'Okay..Now let me play' : 'Show the Rules'}
           </Button>
         </div>
         <br />

@@ -38,7 +38,6 @@ export class TakeQzModal extends Component {
 
   createQid = name => {
     const Qid = sha256(this.props.uid + name).slice(0, 10);
-    console.log(Qid);
     return getQzDoc(this.props.uid, Qid).then(data => {
       return data;
     });
@@ -122,7 +121,7 @@ export class TakeQzModal extends Component {
                     min="10"
                     max="30"
                     step="10"
-                    placeholder="10,20 or 30"
+                    placeholder="10s,20s or 30s"
                     onChange={event =>
                       this.setState({ timeperiod: event.target.value })
                     }

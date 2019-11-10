@@ -4,7 +4,7 @@ import { ParentGameContext } from './GameContext.js';
 
 export function Countdown() {
   const context = useContext(ParentGameContext);
-  const [seconds, setSeconds] = useState(5);
+  const [seconds, setSeconds] = useState(10);
   const [readyN, setReadyN] = useState(null);
   useEffect(() => {
     let subscriber = true;
@@ -16,16 +16,17 @@ export function Countdown() {
       left: '0%',
       top: '0%',
       width: '100%',
-      height: Math.floor(window.innerHeight),
-      background: 'lightgreen',
+      height: window.innerHeight,
+      background: 'rgba(255,51,51,0.5)',
     },
     to: async next => {
       await next({
         left: '0%',
         top: '0%',
         width: '100%',
-        height: seconds * (Math.floor(window.innerHeight) / 10),
-        background: 'lightblue',
+        height: (seconds * window.innerHeight) / 10,
+        backgroundImage:
+          'linear-gradient( 178deg,  rgba(156,177,248,1) 7.5%, rgba(153,247,243,1) 93.1%',
       });
       // }
     },
@@ -35,6 +36,7 @@ export function Countdown() {
     let sec = seconds;
     let interval = setInterval(function() {
       if (sec === 0) {
+        setSeconds(sec);
         setReadyN('Go!!');
         clearInterval(interval);
         context.changeGameStatus(context.uid, context.qid, 'Question');

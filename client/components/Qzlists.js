@@ -32,7 +32,6 @@ export function SavedQzList({ uid, loading }) {
 
 export function TakenQzList({ uid, saved, loading }) {
   const [takenQz, settakenQz] = useState([]);
-  console.log(loading + ' :::: ' + saved);
   useEffect(() => {
     const h = getList(uid, 'taken');
     h.then(d => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useSpring, animated } from 'react-spring';
 import { getQzDoc } from '../../src/firebase.js';
 import { ParentGameContext } from './GameContext.js';
-import { changeQStatus } from '../../src/firebase';
+// import { changeQStatus } from '../../src/firebase';
 
 function ShowQuestions() {
   const context = useContext(ParentGameContext);
@@ -47,17 +47,11 @@ function ShowQuestions() {
   });
 
   const startCountDown = () => {
-    console.log(questionIndex);
-    console.log(loading);
-    console.log(counterSeconds);
-    console.log(Timeperiod);
-    console.log(Question);
-    console.log(QuestionsLength);
     let sec = counterSeconds;
     let interval = setInterval(function() {
       if (sec === 0) {
         clearInterval(interval);
-        if (questionIndex < QuestionsLength - 1) {
+        if (questionIndex <= QuestionsLength) {
           context.changeQStatus(context.uid, context.qid, questionIndex + 1);
           context.changeGameStatus(context.uid, context.qid, 'LeaderBoard');
           // setQuestionIndex(questionIndex + 1);
@@ -74,86 +68,29 @@ function ShowQuestions() {
     <div className="fullWidth height_Onescreen">
       <animated.div className="script-box" style={props} />
       <div
-        className="DashDiv center_Align"
         style={{
-          textAlign: 'center',
-          padding: '0% 1%',
-          overflowY: 'auto',
+          padding: '1%',
           background: 'rgba(255,255,255,0.9)',
         }}
+        className="DashDiv flexCenterAlign center_Align"
       >
         <div
-          className="flexCenterAlign"
           style={{
-            width: '100%',
-            padding: '1%',
-            color: '#343a40',
-            position: 'relative',
+            marginTop: '-10% ',
+            marginBottom: '4%',
+            padding: '1% 2%',
+            background: '#343a40',
+            color: '#fff',
+            borderRadius: '8px',
           }}
         >
+          <h1>{counterSeconds}</h1>
+        </div>
+        <div style={{ padding: '0% 2%' }}>
           <h1 style={{ position: 'absolute', top: '2%', left: '2%' }}>
             {questionIndex + 1}
           </h1>
-          <h1>{Question.question}</h1>
-        </div>
-        <div
-          style={{
-            width: '100%',
-            height: '75%',
-            padding: '1% 2%',
-            position: 'relative',
-          }}
-        >
-          <div className="counterOptAlign counterSty">
-            <h1
-              style={{
-                fontSize: '4em',
-                fontWeight: 'bolder',
-              }}
-            >
-              {counterSeconds}
-            </h1>
-          </div>
-          <div
-            style={{
-              width: '100%',
-              height: '50%',
-            }}
-            className="optionsAwBox"
-          >
-            <div
-              className="options"
-              style={{ borderRadius: '8px 0 0 0', background: '#9be3de' }}
-            >
-              {Question.options[0]}
-            </div>
-            <div
-              className="options"
-              style={{ borderRadius: '0 8px 0 0', background: '#fa877f' }}
-            >
-              {Question.options[1]}
-            </div>
-          </div>
-          <div
-            style={{
-              width: '100%',
-              height: '50%',
-            }}
-            className="optionsAwBox"
-          >
-            <div
-              className="options"
-              style={{ borderRadius: '0 0 0 8px', background: '#e4e4e4' }}
-            >
-              {Question.options[2]}
-            </div>
-            <div
-              className="options"
-              style={{ borderRadius: '0 0 8px 0', background: '#d597ce' }}
-            >
-              {Question.options[3]}
-            </div>
-          </div>
+          <h1 style={{ fontSize: '3.0em' }}>{Question.question}</h1>
         </div>
       </div>
     </div>
@@ -161,3 +98,92 @@ function ShowQuestions() {
 }
 
 export default ShowQuestions;
+
+// <div className="fullWidth height_Onescreen">
+//       <animated.div className="script-box" style={props} />
+//       <div
+//         className="DashDiv center_Align"
+//         style={{
+//           textAlign: 'center',
+//           padding: '0% 1%',
+//           overflowY: 'auto',
+//           background: 'rgba(255,255,255,0.9)',
+//         }}
+//       >
+//         <div
+//           className="flexCenterAlign"
+//           style={{
+//             width: '100%',
+//             padding: '1%',
+//             color: '#343a40',
+//             position: 'relative',
+//           }}
+//         >
+//           <h1 style={{ position: 'absolute', top: '2%', left: '2%' }}>
+//             {questionIndex + 1}
+//           </h1>
+//           <h1>{Question.question}</h1>
+//         </div>
+//         <div className="counterOptAlign counterSty">
+//           <h1
+//             style={{
+//               fontSize: '4em',
+//               fontWeight: 'bolder',
+//             }}
+//           >
+//             {counterSeconds}
+//           </h1>
+//         </div>
+//       </div>
+//     </div>
+//   );
+
+// <div
+//   style={{
+//     width: '100%',
+//     height: '75%',
+//     padding: '1% 2%',
+//     position: 'relative',
+//   }}
+// >
+//   <div
+//     style={{
+//       width: '100%',
+//       height: '50%',
+//     }}
+//     className="optionsAwBox"
+//   >
+//     <div
+//       className="options"
+//       style={{ borderRadius: '8px 0 0 0', background: '#9be3de' }}
+//     >
+//       {Question.options[0]}
+//     </div>
+//     <div
+//       className="options"
+//       style={{ borderRadius: '0 8px 0 0', background: '#fa877f' }}
+//     >
+//       {Question.options[1]}
+//     </div>
+//   </div>
+//   <div
+//     style={{
+//       width: '100%',
+//       height: '50%',
+//     }}
+//     className="optionsAwBox"
+//   >
+//     <div
+//       className="options"
+//       style={{ borderRadius: '0 0 0 8px', background: '#e4e4e4' }}
+//     >
+//       {Question.options[2]}
+//     </div>
+//     <div
+//       className="options"
+//       style={{ borderRadius: '0 0 8px 0', background: '#d597ce' }}
+//     >
+//       {Question.options[3]}
+//     </div>
+//   </div>
+// </div>;

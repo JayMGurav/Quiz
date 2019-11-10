@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Toast } from 'react-bootstrap';
-import { useSpring, animated } from 'react-spring';
 import { ParentGameContext } from './GameContext.js';
 import { getQzDoc, updateScore } from '../../src/firebase.js';
 
@@ -37,17 +36,13 @@ export function DispOptions({ pid }) {
     setSelectTime(Math.round(new Date() / 1000));
     setSelectedAns(value);
 
-    console.log(enterTime + ' ' + selectTime + ' ' + ' ' + selectedAns);
-    console.log(Question);
     if (selectedAns === Question.answer) {
-      console.log('yes');
       setScore((Timeperiod - Math.floor(selectTime - enterTime)) * Timeperiod);
       context.changeAnsStatus('Correct');
     } else {
       context.changeAnsStatus('Wrong');
     }
     setShow(true);
-    // ..need to set userAns ans update score accordingly
   };
 
   // const props = useSpring({
@@ -77,7 +72,7 @@ export function DispOptions({ pid }) {
       }
       if (sec === 2) {
         updateScore(context.qid, pid, score);
-        console.log('in Disp Optio' + score);
+        // console.log('in Disp Optio' + score);
       }
       setCounterSeconds(sec);
       sec--;
@@ -176,9 +171,7 @@ export function DispOptions({ pid }) {
         autohide
       >
         <Toast.Body>
-          <h3>
-            Your Answer : {selectedAns} {score}
-          </h3>
+          <h3>Your Answer : {selectedAns}</h3>
         </Toast.Body>
       </Toast>
     </div>

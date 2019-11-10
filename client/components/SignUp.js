@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Alert, Button } from 'react-bootstrap';
+import { Link } from '@reach/router';
 import HeaderImg from './HeaderImg';
 const headerImg = require('../img/sit.jpg');
 import { auth, createUserProfileDoc } from '../../src/firebase';
@@ -18,17 +19,23 @@ function SignUpDet() {
   const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
   const [ConfirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
-    try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        Email,
-        Password,
-      );
-      user ? createUserProfileDoc(user, { Username }) : null;
-    } catch (err) {
-      console.error('In signUp page ' + err.message);
+    if (Password === ConfirmPassword) {
+      try {
+        const { user } = await auth.createUserWithEmailAndPassword(
+          Email,
+          Password,
+        );
+        user ? createUserProfileDoc(user, { Username }) : null;
+      } catch (err) {
+        setError(err.message);
+        console.error('In signUp page ' + err.message);
+      }
+    } else {
+      setError('The Password and Confirm Password Should Match');
     }
   }
 
@@ -42,6 +49,13 @@ function SignUpDet() {
         className="center_Align signInDet"
         onSubmit={e => this.handleSubmit(e)}
       >
+        {error == '' ? null : (
+          <Alert variant="danger">
+            <h6>{error}</h6>
+          </Alert>
+        )}
+        <br />
+        <Link to="/signIn">Click to SignIn</Link>
         <input
           type="text"
           placeholder="Username..."
@@ -79,12 +93,13 @@ function SignUpDet() {
           value={ConfirmPassword}
         />
         <Button
-          variant="dark"
+          variant="cool"
           style={{
             width: '30%',
             fontSize: '1.0em',
             fontWeight: 'bold',
             marginTop: '30px',
+            color: '#fff',
           }}
           onClick={e => handleSubmit(e)}
         >

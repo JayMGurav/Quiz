@@ -25,7 +25,6 @@ export const firestore = firebase.firestore();
 //create user profile doc in user coll
 export const createUserProfileDoc = async (user, addData) => {
   if (!user) return;
-  console.log('During createUserProfileDoc');
   const userCollRef = firestore.collection(`user`).doc(user.uid);
   const coll = await userCollRef.get();
   if (!coll.exists) {
@@ -48,7 +47,6 @@ export const createUserProfileDoc = async (user, addData) => {
 // to get document from userId
 export const getUserDoc = async uid => {
   if (!uid) return;
-  console.log('During getUserDoc');
   try {
     const data = await firestore.doc(`user/${uid}`).get();
     const data2 = data.data();
@@ -61,7 +59,6 @@ export const getUserDoc = async uid => {
 //create Qz
 export const createQz = async (uid, Qid, Qz) => {
   if (!uid) return;
-  console.log('During createQz');
   const roomsRef = firestore.collection('room').doc(Qid);
   const coll = await roomsRef.get();
   if (!coll.exists) {
@@ -82,11 +79,9 @@ export const createQz = async (uid, Qid, Qz) => {
 };
 
 export const getQzDoc = async (uid, Qid) => {
-  console.log('During getQzDoc');
   if (!uid && !Qid) return;
   try {
     const data = await firestore.doc(`room/${Qid}`).get();
-    console.log('durimg getQz :: ' + data.exists);
     if (data.exists) {
       const data2 = data.data();
       return { uid, ...data2 };
@@ -106,7 +101,6 @@ export const getQzDoc = async (uid, Qid) => {
 
 export const getList = async (uid, tag) => {
   if (!uid && !tag) return;
-  console.log('During getList');
   let query = firestore.collection('room');
   query = query.where('uid', '==', uid);
   query = query.where('tag', '==', tag);
@@ -133,8 +127,6 @@ export const getList = async (uid, tag) => {
 export const changeQzStatus = async (uid, qid, status) => {
   if (!uid && !qid) return;
   const roomsRef = firestore.collection('room').doc(qid);
-
-  console.log(uid, qid, status);
   const coll = await roomsRef.get();
 
   if (coll.exists) {
@@ -176,7 +168,6 @@ export const createQzPlayer = async (Qid, Plyr) => {
   const coll = await roomsRef.get();
   if (!coll.exists) {
     try {
-      console.log(Plyr.name);
       await roomsRef.set({
         ...Plyr,
       });
@@ -201,22 +192,24 @@ export const getPlayer = async (qid, pid) => {
     .collection('Players')
     .doc(pid);
   const doc = await plyrRef.get();
-  // if (doc.exists) {
-  // try {
-  //   // const { players } = doc.data();
-  //   // const val = players.find(o => o.id === pid);
-  return [doc.exists, pid, doc.data()];
-  // } catch (err) {
-  //   console.log('during getPlayer ' + err.message);
-  // }
-  // }
+  if (doc.exists) {
+    // ``;
+    // try {
+    //   // const { players } = doc.data();
+    //   // const val = players.find(o => o.id === pid);
+    return [doc.exists, pid, doc.data()];
+    // } catch (err) {
+    //   console.log('during getPlayer ' + err.message);
+    // }
+  } else {
+    return [false, pid];
+  }
 };
 
 export const changeQuestionStatus = async (uid, qid, Qstatus) => {
   if (!uid && !qid) return;
   const roomsRef = firestore.collection('room').doc(qid);
 
-  console.log(uid, qid, Qstatus);
   const coll = await roomsRef.get();
 
   if (coll.exists) {
@@ -248,7 +241,7 @@ export const getQuestions = async (uid, qid, index) => {
 export const updateScore = async (qid, pid, score) => {
   if (!qid && !pid) return;
   // const roomsRef = firestore.collection('room').doc(qid);
-  console.log(qid, pid, score);
+  // console.log(qid, pid, score);
   const plyrRef = firestore
     .collection('room')
     .doc(qid)

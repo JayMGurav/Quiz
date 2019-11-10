@@ -6,7 +6,7 @@ import About from './About';
 import GameId from './GameId';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
-
+import { ContactUs } from './ContactUs';
 export const NavLink = props => (
   <Link
     {...props}
@@ -52,6 +52,7 @@ function Home() {
       <Router>
         <HomePage path="/" />
         <About path="/aboutus" />
+        <ContactUs path="/contactus" />
         <GameId path="gameId" />
         <SignUp path="/signUp" />
         <SignIn path="/signIn" />

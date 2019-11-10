@@ -8,12 +8,11 @@ import { Button } from 'react-bootstrap';
 export function UserLeaderBoard() {
   const context = useContext(ParentGameContext);
   const [qStat, setqStat] = useState(context.Qstatus);
-  console.log(qStat);
   return (
     <div className="fullWidth height_Onescreen flexCenterAlign">
       <Button
+        variant="dark"
         onClick={async () => {
-          console.log(qStat);
           await context.changeGameStatus(context.uid, context.qid, 'Question');
           await context.changeQStatus(context.uid, context.qid, qStat);
         }}
@@ -34,19 +33,18 @@ export function PlayerLeaderBoard({ pid }) {
     // get useScore his answer and correct Ans
     // console.log('in LeaderBoard' + context.uid);
     getPlayer(context.qid, pid).then(data => {
-      console.log('in leaderboard ' + data);
-      setScore(data.score);
+      // console.log('in leaderboard ' + data[2]);
+      setScore(data[2].score);
     });
   }, []);
 
   if (context.ansStatus === 'Correct') {
     return (
       <div style={{ background: '#343a40' }}>
-        <div
-          className="center_Align"
-          // style={{ position: 'absolute', top: '50%',left:'50%',transform:tr }}
-        >
-          <h1 style={{ color: '#fff' }}>score : {score}</h1>
+        <div className="fullWidth height_Onescreen flexCenterAlign">
+          <h1 style={{ background: '#343a40', color: '#fff' }}>
+            Correct {score}
+          </h1>
         </div>
         <Confetti
           width={window.innerWidth}
