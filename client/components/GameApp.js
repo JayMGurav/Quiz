@@ -49,7 +49,7 @@ function GameApp(props) {
   const { qid, status, setUid, setQid, changeGameStatus } = useContext(
     ParentGameContext,
   );
-  console.log(status);
+  // console.log(status);
 
   useEffect(() => {
     setUid(props.location.state.uid);

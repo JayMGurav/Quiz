@@ -241,7 +241,7 @@ export const getQuestions = async (uid, qid, index) => {
 export const updateScore = async (qid, pid, score) => {
   if (!qid && !pid) return;
   // const roomsRef = firestore.collection('room').doc(qid);
-  // console.log(qid, pid, score);
+  console.log(qid, pid, score);
   const plyrRef = firestore
     .collection('room')
     .doc(qid)
@@ -252,10 +252,25 @@ export const updateScore = async (qid, pid, score) => {
     try {
       await plyrRef.update({
         score: firebase.firestore.FieldValue.increment(score),
+        correct: firebase.firestore.FieldValue.increment(1),
       });
     } catch (err) {
       console.log('During update Score ' + err.message);
     }
+  }
+};
+
+//order the player according to score
+export const orderByScore = async qid => {
+  if (!qid) return;
+  const qrerf = firestore.collection('room').doc(qid);
+  const doc = qrerf.get();
+  if (doc.exists) {
+    const playersOrder = qrerf
+      .collection('players')
+      .orderBy('score')
+      .get();
+    console.log(playersOrder.data());
   }
 };
 

@@ -27,7 +27,7 @@ function SignInDet() {
         .signInWithEmailAndPassword(Email, Password)
         .then(
           d => {
-            console.log(d);
+            // console.log(d);
           },
           err => {
             setError(err.code);

@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, Fragment } from 'react';
 import { ParentGameContext } from './GameContext.js';
-import { useTrail, useTransition, animated } from 'react-spring';
-import { Button, ThemeProvider } from 'react-bootstrap';
+import { useTrail, animated } from 'react-spring';
+import { Button } from 'react-bootstrap';
 import { Countdown } from './Started';
 import { DispOptions } from './DispOptions.js';
 import { PlayerLeaderBoard } from './LeaderBoard.js';
@@ -101,10 +101,7 @@ function Rules({ data, context }) {
         style={{ color: '#343a40', textAlign: 'center' }}
       >
         <div>
-          <h2>
-            Hey {data.name}, There are some "RULES" that you should know{' '}
-            {context.status}
-          </h2>
+          <h2>Hey {data.name}, There are some "RULES" that you should know</h2>
           <Button
             variant="outline-dark"
             style={{ margin: '2%', fontWeight: 'bold' }}

@@ -10,8 +10,8 @@ export function DispOptions({ pid }) {
   const [Timeperiod, setTimeperiod] = useState();
   const [Question, setQuestion] = useState();
   const [questionIndex, setQuestionIndex] = useState(context.Qstatus);
-  const [enterTime, setEnterTime] = useState();
-  const [selectTime, setSelectTime] = useState(0);
+  const [enterTime, setEnterTime] = useState(Math.round(new Date() / 1000));
+  const [flag, setflag] = useState(true);
   const [selectedAns, setSelectedAns] = useState('');
   const [show, setShow] = useState(false);
   const [score, setScore] = useState(1);
@@ -30,39 +30,29 @@ export function DispOptions({ pid }) {
       startCountDown();
     }
   }, [loading]);
+  // context.changeAnsStatus('Correct');
 
-  const handleClick = (e, value) => {
-    e.preventDefault();
-    setSelectTime(Math.round(new Date() / 1000));
-    setSelectedAns(value);
+  const handleClick = value => {
+    if (flag) {
+      if (value === Question.answer) {
+        score != 1 ? setflag(false) : null;
+        console.log(score);
+        const scoreTOUpdate =
+          (Math.round(new Date() / 1000) - enterTime) / Timeperiod;
 
-    if (selectedAns === Question.answer) {
-      setScore((Timeperiod - Math.floor(selectTime - enterTime)) * Timeperiod);
-      context.changeAnsStatus('Correct');
+        setSelectedAns(value);
+        setScore((Timeperiod - scoreTOUpdate) * Timeperiod);
+        score != 1 ? updateScore(context.qid, pid, score) : null;
+        context.changeAnsStatus('Correct');
+      } else {
+        setSelectedAns(value);
+        context.changeAnsStatus('Wrong');
+      }
     } else {
-      context.changeAnsStatus('Wrong');
+      console.log('say hello');
     }
     setShow(true);
   };
-
-  // const props = useSpring({
-  //   from: {
-  //     left: '0%',
-  //     top: '0%',
-  //     width: '100%',
-  //     height: Math.floor(window.innerHeight),
-  //     background: '#343a40',
-  //   },
-  //   to: async next => {
-  //     await next({
-  //       left: '0%',
-  //       top: '0%',
-  //       width: '100%',
-  //       height: counterSeconds * (Math.floor(window.innerHeight) / Timeperiod),
-  //       background: '#343a40',
-  //     });
-  //   },
-  // });
 
   const startCountDown = () => {
     let sec = counterSeconds;
@@ -70,8 +60,8 @@ export function DispOptions({ pid }) {
       if (sec === 0) {
         clearInterval(interval);
       }
-      if (sec === 2) {
-        updateScore(context.qid, pid, score);
+      if (sec === 1) {
+        // updateScore(context.qid, pid, score);
         // console.log('in Disp Optio' + score);
       }
       setCounterSeconds(sec);
@@ -119,14 +109,14 @@ export function DispOptions({ pid }) {
             <div
               className="options"
               style={{ borderRadius: '8px 0 0 0', background: '#9be3de' }}
-              onClick={event => handleClick(event, Question.options[0])}
+              onClick={() => handleClick(Question.options[0])}
             >
               {Question.options[0]}
             </div>
             <div
               className="options"
               style={{ borderRadius: '0 8px 0 0', background: '#fa877f' }}
-              onClick={event => handleClick(event, Question.options[1])}
+              onClick={() => handleClick(Question.options[1])}
             >
               {Question.options[1]}
             </div>
@@ -141,15 +131,14 @@ export function DispOptions({ pid }) {
             <div
               className="options"
               style={{ borderRadius: '0 0 0 8px', background: '#e4e4e4' }}
-              onClick={event => handleClick(event, Question.options[2])}
-              onBlur={event => handleClick(event, Question.options[2])}
+              onClick={() => handleClick(Question.options[2])}
             >
               {Question.options[2]}
             </div>
             <div
               className="options"
               style={{ borderRadius: '0 0 8px 0', background: '#d597ce' }}
-              onClick={event => handleClick(event, Question.options[3])}
+              onClick={() => handleClick(Question.options[3])}
             >
               {Question.options[3]}
             </div>

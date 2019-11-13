@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useSpring, animated } from 'react-spring';
-import { getQzDoc } from '../../src/firebase.js';
+import { getQzDoc, orderByScore } from '../../src/firebase.js';
 import { ParentGameContext } from './GameContext.js';
 // import { changeQStatus } from '../../src/firebase';
 
@@ -51,6 +51,7 @@ function ShowQuestions() {
     let interval = setInterval(function() {
       if (sec === 0) {
         clearInterval(interval);
+        orderByScore(context.qid);
         if (questionIndex <= QuestionsLength) {
           context.changeQStatus(context.uid, context.qid, questionIndex + 1);
           context.changeGameStatus(context.uid, context.qid, 'LeaderBoard');

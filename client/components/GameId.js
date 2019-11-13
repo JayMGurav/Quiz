@@ -26,12 +26,11 @@ function GameDet() {
     score: 0,
     rank: 0,
     correct: 0,
-    inCorrect: 0,
   };
 
   const createPlayerId = (gameId, name) => {
     const pid = sha256(gameId + name).slice(0, 10);
-    console.log(pid);
+    // console.log(pid);
     return getPlayer(gameId, pid);
   };
   //check for uniqueness

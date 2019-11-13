@@ -113,7 +113,30 @@ html{
     align-items: center;
 }
 
+
+/* ///////// */
+
+
+
+
+
+
+
+
+
+.options:hover{
+    box-shadow: 0px 3px 6px rgba(75, 75, 75, 0.3);
+}
+
+
+
+
 /* .navs {} */
  @media only screen and (min-device-width: 481px) and (max-device-width: 900px){
     
 }
+
+
+
+
+
