@@ -3,6 +3,7 @@ import {
   changeQzStatus,
   changeQuestionStatus,
   firestore,
+  getPlayersOrder,
 } from '../../src/firebase';
 
 export const ParentGameContext = createContext(null);
@@ -13,6 +14,7 @@ function GameContextProvider(props) {
   const [Qstatus, setQStatus] = useState(0);
   const [uid, setUid] = useState(null);
   const [ansStatus, setAnsStatus] = useState('');
+  const [topScore, setTopScore] = useState([]);
 
   useEffect(() => {
     let subscribeerBe = true;
@@ -37,6 +39,11 @@ function GameContextProvider(props) {
     }
     return () => (subscribeerBe = false);
   }, []);
+
+  const getNSetScore = async qid => {
+    const data = await getPlayersOrder(qid);
+    setTopScore(data);
+  };
 
   const changeGameStatus = (uid, qid, status) => {
     changeQzStatus(uid, qid, status)
@@ -91,6 +98,7 @@ function GameContextProvider(props) {
         qid,
         status,
         Qstatus,
+        topScore,
         setQid,
         getStatusSnap,
         ansStatus,
@@ -98,6 +106,7 @@ function GameContextProvider(props) {
         setUid,
         changeGameStatus,
         changeQStatus,
+        getNSetScore,
         getQStatusSnap,
       }}
     >

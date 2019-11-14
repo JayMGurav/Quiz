@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect, useContext } from 'react';
-import { getPlayer, firestore } from '../../src/firebase.js';
+import { getPlayer } from '../../src/firebase.js';
+import { useTransition, animated } from 'react-spring';
 import { ParentGameContext } from './GameContext.js';
 import Confetti from 'react-confetti';
 import { Button } from 'react-bootstrap';
@@ -7,52 +8,65 @@ import { Button } from 'react-bootstrap';
 // for users
 export function UserLeaderBoard() {
   const context = useContext(ParentGameContext);
-  const [qStat, setqStat] = useState(context.Qstatus);
-  const [rank, setRank] = useState();
+  // const [qStat, setqStat] = useState(context.Qstatus);
 
   useEffect(() => {
-    let isSubscribed = true;
-    if (isSubscribed) {
-      getPlayersOrder();
-    }
-    return () => (isSubscribed = false);
+    context.getNSetScore(context.qid);
   }, []);
 
-  const getPlayersOrder = async () => {
-    const data = await firestore
-      .collection('room')
-      .doc(context.qid)
-      .collection('Players')
-      .orderBy('score')
-      .limit(3)
-      .get()
-      .then(d => {
-        return d;
-      });
-    // const doc = qrerf.get();
-    // if (doc.exists) {
-    // const playersOrder = qrerf
-    //   .collection('Players')
-    //   .orderBy('score')
-    //   .get();
-    console.log(data + 'hello');
-    // setRank(data.data());
-  };
+  let height = 0;
+  const transitions = useTransition(
+    context.topScore.map(data => ({
+      ...data,
+      height: 20,
+      y: (height += 20) - 20,
+    })),
+    d => d.name,
+    {
+      from: { height: 0, opacity: 0 },
+      leave: { height: 0, opacity: 0 },
+      enter: ({ y, height }) => ({ y, height, opacity: 1 }),
+      update: ({ y, height }) => ({ y, height }),
+    },
+  );
 
-  // })();
-
-  // console.log('hello' + rank);
   return (
-    <div className="fullWidth height_Onescreen flexCenterAlign">
-      <Button
-        variant="dark"
-        onClick={async () => {
-          await context.changeGameStatus(context.uid, context.qid, 'Question');
-          // await context.changeQStatus(context.uid, context.qid, qStat);
-        }}
-      >
-        Next Question
-      </Button>
+    <div
+      className="fullWidth height_Onescreen flexCenterAlign"
+      style={{ background: '#f2f2f2' }}
+    >
+      <div style={{ width: '60%', height: '80vh', textAlign: 'center' }}>
+        <div className="list">
+          {transitions.map(({ item, props: { y, ...rest }, key }, index) => (
+            <animated.div
+              key={key}
+              className="card"
+              style={{
+                zIndex: context.topScore.length - index,
+                transform: y.interpolate(y => `translate3d(0,${y}px,0)`),
+                ...rest,
+              }}
+            >
+              <div className="cell">
+                <div className="details">{item.name + '  ' + item.score}</div>
+              </div>
+            </animated.div>
+          ))}
+        </div>
+        <Button
+          variant="dark"
+          onClick={async () => {
+            await context.changeGameStatus(
+              context.uid,
+              context.qid,
+              'Question',
+            );
+            // await context.changeQStatus(context.uid, context.qid, qStat);
+          }}
+        >
+          Next Question
+        </Button>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,20 @@
+{
+  "name": "Qzame",
+  "short_name": "Qz",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "A Quiz app.",
+  "icons": [
+    {
+      "src": "./logo1.png",
+      "sizes": "274x274",
+      "type": "image/png"
+    },
+    {
+      "src": "./l2.png",
+      "sizes": "548x548",
+      "type": "image/png"
+    }
+  ]
+}

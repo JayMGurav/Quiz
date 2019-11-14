@@ -261,17 +261,39 @@ export const updateScore = async (qid, pid, score) => {
 };
 
 //order the player according to score
-export const orderByScore = async qid => {
+// export const orderByScore = async qid => {
+//   if (!qid) return;
+//   const qrerf = firestore.collection('room').doc(qid);
+//   const doc = qrerf.get();
+//   if (doc.exists) {
+//     const playersOrder = qrerf
+//       .collection('players')
+//       .orderBy('score')
+//       .get();
+//     console.log(playersOrder.data());
+//   }
+// };
+
+export const getPlayersOrder = async qid => {
   if (!qid) return;
   const qrerf = firestore.collection('room').doc(qid);
-  const doc = qrerf.get();
+  const doc = await qrerf.get();
+  console.log(doc.exists);
   if (doc.exists) {
-    const playersOrder = qrerf
-      .collection('players')
-      .orderBy('score')
-      .get();
-    console.log(playersOrder.data());
+    const topScoreArr = [];
+    const data = await qrerf
+      .collection('Players')
+      .orderBy('score', 'desc')
+      .limit(3)
+      .get()
+      .then(snap => {
+        snap.forEach(doc => {
+          const { name, score } = doc.data();
+          topScoreArr.push({ name, score });
+        });
+      });
+    // console.log(data.data());
+    return topScoreArr;
   }
 };
-
 export default firebase;

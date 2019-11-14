@@ -389,6 +389,50 @@ html{
     color: #fff;
 }
 
+
+
+
+
+
+/* lm;m */
+/* for leaderBoard */
+
+.list {
+ width:100%;
+ height:80%;
+}
+
+.card {
+  position: absolute;
+  will-change: transform, height, opacity;
+  margin: auto;
+  width: 80%;
+  border-radius: 8px;
+  box-shadow: 0px 10px 25px -10px rgba(0, 0, 0, 0.2); 
+}
+
+.cell {
+  position: relative;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  text-transform: uppercase;
+  font-size: 3.0em;
+  font-weight: bold;
+  border-radius: 8px;
+  
+  
+}
+
+.details {
+    width: 100%;
+    height: 100%;
+    display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+}
 @media only screen and (max-width: 600px) and (min-width: 300px) {
     .navs{
     width: 80%;
